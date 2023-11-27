@@ -8,11 +8,11 @@ RECORD_NAME="你的域名"
 cf_directory="/root"
 #上面的内容需要填写
 cd "$cf_directory"
-record_info=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records?type=A&name=$RECORD_NAME" \
+record_info=$(curl  -X GET "https://cors.yicdn.vip/https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records?type=A&name=$RECORD_NAME" \
      -H "X-Auth-Email: $API_EMAIL" \
      -H "X-Auth-Key: $API_KEY" \
      -H "Content-Type: application/json")
-record_id=$(echo "$record_info" | grep -oP '(?<="id":")[^"]+' | head -1)
+record_id=$(echo "$record_info" |  jsonfilter -e '@["result"][0].id')
 if [ -z "$record_id" ]; then
   echo "无法提取记录ID"
   exit 1
